@@ -16,6 +16,8 @@ public class Potato {
         System.out.println(line);
 
         Scanner scanner = new Scanner(System.in);
+        String[] tasks = new String[100];
+        int taskCount = 0;
 
         while (scanner.hasNextLine()) {
             String input = scanner.nextLine();
@@ -25,10 +27,17 @@ public class Potato {
                 System.out.println("Bye. Hope to see you again soon!");
                 System.out.println(line);
                 break;
+            } else if (input.equalsIgnoreCase("list")) {
+                for (int i = 0; i < taskCount; i++) {
+                    System.out.println((i + 1) + ". " + tasks[i]);
+                }
+                System.out.println(line);
+            } else {
+                tasks[taskCount] = input;
+                taskCount++;
+                System.out.println("added: " + input);
+                System.out.println(line);
             }
-
-            System.out.println(input);
-            System.out.println(line);
         }
 
         scanner.close();
