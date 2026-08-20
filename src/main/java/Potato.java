@@ -49,14 +49,41 @@ public class Potato {
                     System.out.println("  " + tasks[index]);
                 }
                 System.out.println(line);
-            } else {
-                tasks[taskCount] = new Task(input);
+            } else if (input.startsWith("todo ")) {
+                String desc = input.substring(5).trim();
+                Task t = new Todo(desc);
+                tasks[taskCount] = t;
                 taskCount++;
-                System.out.println("added: " + input);
-                System.out.println(line);
+                printTaskAdded(t, taskCount, line);
+            } else if (input.startsWith("deadline ")) {
+                String[] parts = input.substring(9).split(" /by ", 2);
+                Task t = new Deadline(parts[0].trim(), parts[1].trim());
+                tasks[taskCount] = t;
+                taskCount++;
+                printTaskAdded(t, taskCount, line);
+            } else if (input.startsWith("event ")) {
+                String[] parts = input.substring(6).split(" /from ", 2);
+                String desc = parts[0].trim();
+                String[] timeParts = parts[1].split(" /to ", 2);
+                Task t = new Event(desc, timeParts[0].trim(), timeParts[1].trim());
+                tasks[taskCount] = t;
+                taskCount++;
+                printTaskAdded(t, taskCount, line);
+            } else {
+                Task t = new Task(input);
+                tasks[taskCount] = t;
+                taskCount++;
+                printTaskAdded(t, taskCount, line);
             }
         }
 
         scanner.close();
+    }
+
+    private static void printTaskAdded(Task task, int count, String line) {
+        System.out.println("Got it. I've added this task:");
+        System.out.println("  " + task);
+        System.out.println("Now you have " + count + " tasks in the list.");
+        System.out.println(line);
     }
 }
