@@ -17,7 +17,7 @@ public class Potato {
         System.out.println(line);
 
         Scanner scanner = new Scanner(System.in);
-        ArrayList<Task> tasks = new ArrayList<>();
+        ArrayList<Task> tasks = Storage.load();
 
         while (scanner.hasNextLine()) {
             String input = scanner.nextLine().trim();
@@ -32,7 +32,7 @@ public class Potato {
 
                 switch (command) {
                     case BYE:
-                        System.out.println("Bye. Hope to see you again soon!");
+                        System.out.println("Alrighty!! Byebye. \nHope to see you again soon!");
                         System.out.println(line);
                         scanner.close();
                         return;
@@ -47,6 +47,7 @@ public class Potato {
                     case MARK: {
                         int index = parseIndex(input, "mark", tasks.size());
                         tasks.get(index).markAsDone();
+                        Storage.save(tasks);
                         System.out.println("Nice! I've marked this task as done:");
                         System.out.println("  " + tasks.get(index));
                         break;
@@ -55,6 +56,7 @@ public class Potato {
                     case UNMARK: {
                         int index = parseIndex(input, "unmark", tasks.size());
                         tasks.get(index).unmarkDone();
+                        Storage.save(tasks);
                         System.out.println("OK, I've marked this task as not done yet:");
                         System.out.println("  " + tasks.get(index));
                         break;
@@ -63,6 +65,7 @@ public class Potato {
                     case DELETE: {
                         int index = parseIndex(input, "delete", tasks.size());
                         Task removedTask = tasks.remove(index);
+                        Storage.save(tasks);
                         System.out.println("Noted. I've removed this task:");
                         System.out.println("  " + removedTask);
                         System.out.println("Now you have " + tasks.size() + " tasks in the list.");
@@ -76,6 +79,7 @@ public class Potato {
                         }
                         Task t = new Todo(desc);
                         tasks.add(t);
+                        Storage.save(tasks);
                         printTaskAdded(t, tasks.size());
                         break;
                     }
@@ -91,6 +95,7 @@ public class Potato {
                         }
                         Task t = new Deadline(parts[0].trim(), parts[1].trim());
                         tasks.add(t);
+                        Storage.save(tasks);
                         printTaskAdded(t, tasks.size());
                         break;
                     }
@@ -110,6 +115,7 @@ public class Potato {
                         }
                         Task t = new Event(parts[0].trim(), timeParts[0].trim(), timeParts[1].trim());
                         tasks.add(t);
+                        Storage.save(tasks);
                         printTaskAdded(t, tasks.size());
                         break;
                     }
@@ -145,7 +151,7 @@ public class Potato {
     }
 
     private static void printTaskAdded(Task task, int count) {
-        System.out.println("Got it. I've added this task:");
+        System.out.println("Yessir. I've added this task:");
         System.out.println("  " + task);
         System.out.println("Now you have " + count + " tasks in the list.");
     }
