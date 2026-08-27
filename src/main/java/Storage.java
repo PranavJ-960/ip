@@ -54,9 +54,9 @@ public class Storage {
         if (task instanceof Todo) {
             return "T | " + (task.isDone ? "1" : "0") + " | " + task.description;
         } else if (task instanceof Deadline) {
-            return "D | " + (task.isDone ? "1" : "0") + " | " + task.description + " | " + ((Deadline) task).by;
+            return "D | " + (task.isDone ? "1" : "0") + " | " + task.description + " | " + ((Deadline) task).getBy();
         } else if (task instanceof Event) {
-            return "E | " + (task.isDone ? "1" : "0") + " | " + task.description + " | " + ((Event) task).from + " | " + ((Event) task).to;
+            return "E | " + (task.isDone ? "1" : "0") + " | " + task.description + " | " + ((Event) task).getFrom() + " | " + ((Event) task).getTo();
         }
         return "";
     }
