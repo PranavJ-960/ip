@@ -8,15 +8,19 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Storage {
-    private static final String FILE_PATH = "./data/potato.txt";
+    private final String filePath;
 
-    public static void save(ArrayList<Task> tasks) {
+    public Storage(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public void save(ArrayList<Task> tasks) {
         try {
-            Path path = Paths.get(FILE_PATH);
+            Path path = Paths.get(filePath);
             if (path.getParent() != null) {
                 Files.createDirectories(path.getParent());
             }
-            try (FileWriter writer = new FileWriter(FILE_PATH)) {
+            try (FileWriter writer = new FileWriter(filePath)) {
                 for (Task task : tasks) {
                     writer.write(taskToFileFormat(task) + System.lineSeparator());
                 }
@@ -26,9 +30,9 @@ public class Storage {
         }
     }
 
-    public static ArrayList<Task> load() {
+    public ArrayList<Task> load() {
         ArrayList<Task> tasks = new ArrayList<>();
-        File file = new File(FILE_PATH);
+        File file = new File(filePath);
         if (!file.exists()) {
             return tasks;
         }
@@ -50,7 +54,7 @@ public class Storage {
         return tasks;
     }
 
-    private static String taskToFileFormat(Task task) {
+    private String taskToFileFormat(Task task) {
         if (task instanceof Todo) {
             return "T | " + (task.isDone ? "1" : "0") + " | " + task.description;
         } else if (task instanceof Deadline) {
@@ -61,7 +65,7 @@ public class Storage {
         return "";
     }
 
-    private static Task parseTaskFromFile(String line) {
+    private Task parseTaskFromFile(String line) {
         String[] parts = line.split(" \\| ");
         if (parts.length < 3) {
             return null;

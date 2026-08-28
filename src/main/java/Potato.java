@@ -1,158 +1,39 @@
-import java.util.ArrayList;
-import java.util.Scanner;
-
 public class Potato {
-    public static void main(String[] args) {
-        String line = "____________________________________________________________";
-        String logo = " ____   ___ _____  _  _____ ___  \n"
-                + "|  _ \\ / _ \\_   _|/ \\|_   _/ _ \\ \n"
-                + "| |_) | | | || | / _ \\ | || | | |\n"
-                + "|  __/| |_| || |/ ___ \\| || |_| |\n"
-                + "|_|    \\___/ |_|/_/   \\_\\_| \\___/\n";
+    private final Storage storage;
+    private final TaskList tasks;
+    private final Ui ui;
 
-        System.out.println("Hello from\n" + logo);
-        System.out.println(line);
-        System.out.println("Hello! I'm Potato.");
-        System.out.println("What can I do for you?");
-        System.out.println(line);
+    public Potato(String filePath) {
+        ui = new Ui();
+        storage = new Storage(filePath);
+        tasks = new TaskList(storage.load());
+    }
 
-        Scanner scanner = new Scanner(System.in);
-        ArrayList<Task> tasks = Storage.load();
+    public void run() {
+        ui.showWelcome();
+        boolean isExit = false;
 
-        while (scanner.hasNextLine()) {
-            String input = scanner.nextLine().trim();
-            if (input.isEmpty()) {
+        while (!isExit) {
+            String fullCommand = ui.readCommand();
+            if (fullCommand.isEmpty()) {
                 continue;
             }
 
-            System.out.println(line);
-
+            ui.showLine();
             try {
-                Command command = Command.parse(input);
-
-                switch (command) {
-                    case BYE:
-                        System.out.println("Alrighty!! Byebye. \nHope to see you again soon!");
-                        System.out.println(line);
-                        scanner.close();
-                        return;
-
-                    case LIST:
-                        System.out.println("Here are the tasks in your list:");
-                        for (int i = 0; i < tasks.size(); i++) {
-                            System.out.println((i + 1) + "." + tasks.get(i));
-                        }
-                        break;
-
-                    case MARK: {
-                        int index = parseIndex(input, "mark", tasks.size());
-                        tasks.get(index).markAsDone();
-                        Storage.save(tasks);
-                        System.out.println("Nice! I've marked this task as done:");
-                        System.out.println("  " + tasks.get(index));
-                        break;
-                    }
-
-                    case UNMARK: {
-                        int index = parseIndex(input, "unmark", tasks.size());
-                        tasks.get(index).unmarkDone();
-                        Storage.save(tasks);
-                        System.out.println("OK, I've marked this task as not done yet:");
-                        System.out.println("  " + tasks.get(index));
-                        break;
-                    }
-
-                    case DELETE: {
-                        int index = parseIndex(input, "delete", tasks.size());
-                        Task removedTask = tasks.remove(index);
-                        Storage.save(tasks);
-                        System.out.println("Noted. I've removed this task:");
-                        System.out.println("  " + removedTask);
-                        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                        break;
-                    }
-
-                    case TODO: {
-                        String desc = input.length() > 4 ? input.substring(4).trim() : "";
-                        if (desc.isEmpty()) {
-                            throw new PotatoException("OOPS!!! The description of a todo cannot be empty.");
-                        }
-                        Task t = new Todo(desc);
-                        tasks.add(t);
-                        Storage.save(tasks);
-                        printTaskAdded(t, tasks.size());
-                        break;
-                    }
-
-                    case DEADLINE: {
-                        String body = input.length() > 8 ? input.substring(8).trim() : "";
-                        if (body.isEmpty()) {
-                            throw new PotatoException("OOPS!!! The description of a deadline cannot be empty.");
-                        }
-                        String[] parts = body.split(" /by ", 2);
-                        if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
-                            throw new PotatoException("OOPS!!! Please specify a deadline using '/by <date/time>'.");
-                        }
-                        Task t = new Deadline(parts[0].trim(), parts[1].trim());
-                        tasks.add(t);
-                        Storage.save(tasks);
-                        printTaskAdded(t, tasks.size());
-                        break;
-                    }
-
-                    case EVENT: {
-                        String body = input.length() > 5 ? input.substring(5).trim() : "";
-                        if (body.isEmpty()) {
-                            throw new PotatoException("OOPS!!! The description of an event cannot be empty.");
-                        }
-                        String[] parts = body.split(" /from ", 2);
-                        if (parts.length < 2 || parts[0].trim().isEmpty()) {
-                            throw new PotatoException("OOPS!!! Please specify event timing using '/from <start> /to <end>'.");
-                        }
-                        String[] timeParts = parts[1].split(" /to ", 2);
-                        if (timeParts.length < 2 || timeParts[0].trim().isEmpty() || timeParts[1].trim().isEmpty()) {
-                            throw new PotatoException("OOPS!!! Please specify event end time using '/to <end>'.");
-                        }
-                        Task t = new Event(parts[0].trim(), timeParts[0].trim(), timeParts[1].trim());
-                        tasks.add(t);
-                        Storage.save(tasks);
-                        printTaskAdded(t, tasks.size());
-                        break;
-                    }
-
-                    case UNKNOWN:
-                    default:
-                        throw new PotatoException("OOPS!!! I'm sorry, but I don't know what that means :-(");
-                }
+                Command c = Parser.parse(fullCommand);
+                c.execute(tasks, ui, storage);
+                isExit = c.isExit();
             } catch (PotatoException e) {
-                System.out.println(e.getMessage());
+                ui.showError(e.getMessage());
+            } finally {
+                ui.showLine();
             }
-
-            System.out.println(line);
         }
-
-        scanner.close();
+        ui.closeScanner();
     }
 
-    private static int parseIndex(String input, String command, int size) throws PotatoException {
-        String arg = input.substring(command.length()).trim();
-        if (arg.isEmpty()) {
-            throw new PotatoException("OOPS!!! Please provide a task number to " + command + ".");
-        }
-        try {
-            int index = Integer.parseInt(arg) - 1;
-            if (index < 0 || index >= size) {
-                throw new PotatoException("OOPS!!! Task number " + (index + 1) + " does not exist.");
-            }
-            return index;
-        } catch (NumberFormatException e) {
-            throw new PotatoException("OOPS!!! Please specify a valid integer task number.");
-        }
-    }
-
-    private static void printTaskAdded(Task task, int count) {
-        System.out.println("Yessir. I've added this task:");
-        System.out.println("  " + task);
-        System.out.println("Now you have " + count + " tasks in the list.");
+    public static void main(String[] args) {
+        new Potato("./data/potato.txt").run();
     }
 }

@@ -1,20 +1,7 @@
-public enum Command {
-    BYE,
-    LIST,
-    MARK,
-    UNMARK,
-    DELETE,
-    TODO,
-    DEADLINE,
-    EVENT,
-    UNKNOWN;
+public abstract class Command {
+    public abstract void execute(TaskList tasks, Ui ui, Storage storage) throws PotatoException;
 
-    public static Command parse(String input) {
-        String firstWord = input.split(" ", 2)[0].toUpperCase();
-        try {
-            return Command.valueOf(firstWord);
-        } catch (IllegalArgumentException e) {
-            return UNKNOWN;
-        }
+    public boolean isExit() {
+        return false;
     }
 }
