@@ -13,13 +13,26 @@ import potato.task.Event;
 import potato.task.Task;
 import potato.task.Todo;
 
+/**
+ * Handles reading tasks from and writing tasks to hard disk file storage.
+ */
 public class Storage {
     private final String filePath;
 
+    /**
+     * Constructs a {@code Storage} object targeting the specified file path.
+     *
+     * @param filePath Path to the data storage file.
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
+    /**
+     * Saves all tasks from the provided list into hard disk file storage.
+     *
+     * @param tasks List of tasks to write to the file.
+     */
     public void save(ArrayList<Task> tasks) {
         try {
             Path path = Paths.get(filePath);
@@ -36,6 +49,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Loads tasks from the file system into an {@code ArrayList}.
+     *
+     * @return List of loaded tasks.
+     */
     public ArrayList<Task> load() {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
@@ -60,17 +78,30 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * Formats a {@code Task} object into a line string representation for storage.
+     *
+     * @param task Task to convert.
+     * @return Formatted file storage line.
+     */
     private String taskToFileFormat(Task task) {
+        String isDoneFlag = task.getStatusIcon().equals("X") ? "1" : "0";
         if (task instanceof Todo) {
-            return "T | " + (task.isDone ? "1" : "0") + " | " + task.description;
+            return "T | " + isDoneFlag + " | " + task.getDescription();
         } else if (task instanceof Deadline) {
-            return "D | " + (task.isDone ? "1" : "0") + " | " + task.description + " | " + ((Deadline) task).getBy();
+            return "D | " + isDoneFlag + " | " + task.getDescription() + " | " + ((Deadline) task).getBy();
         } else if (task instanceof Event) {
-            return "E | " + (task.isDone ? "1" : "0") + " | " + task.description + " | " + ((Event) task).getFrom() + " | " + ((Event) task).getTo();
+            return "E | " + isDoneFlag + " | " + task.getDescription() + " | " + ((Event) task).getFrom() + " | " + ((Event) task).getTo();
         }
         return "";
     }
 
+    /**
+     * Parses a single line string from the storage file into a corresponding {@code Task}.
+     *
+     * @param line Line text read from storage file.
+     * @return Constructed {@code Task} object, or {@code null} if formatted improperly.
+     */
     private Task parseTaskFromFile(String line) {
         String[] parts = line.split(" \\| ");
         if (parts.length < 3) {
