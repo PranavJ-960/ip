@@ -8,22 +8,22 @@ import java.time.format.DateTimeParseException;
  * Represents a deadline task with a description and a due date.
  */
 public class Deadline extends Task {
-    protected String by;
-    protected LocalDate date;
+    protected String rawDeadlineString;
+    protected LocalDate parsedDeadlineDate;
 
     /**
      * Constructs a {@code Deadline} task with a description and due date.
      *
      * @param description Description of the task.
-     * @param by Due date string, optionally in YYYY-MM-DD format.
+     * @param rawDeadlineString Due date string, optionally in YYYY-MM-DD format.
      */
-    public Deadline(String description, String by) {
+    public Deadline(String description, String rawDeadlineString) {
         super(description);
-        this.by = by;
+        this.rawDeadlineString = rawDeadlineString;
         try {
-            this.date = LocalDate.parse(by);
+            this.parsedDeadlineDate = LocalDate.parse(rawDeadlineString);
         } catch (DateTimeParseException e) {
-            this.date = null;
+            this.parsedDeadlineDate = null;
         }
     }
 
@@ -33,7 +33,7 @@ public class Deadline extends Task {
      * @return Raw deadline string.
      */
     public String getBy() {
-        return by;
+        return rawDeadlineString;
     }
 
     /**
@@ -43,9 +43,9 @@ public class Deadline extends Task {
      */
     @Override
     public String toString() {
-        String displayDate = (date != null)
-                ? date.format(DateTimeFormatter.ofPattern("MMM dd yyyy"))
-                : by;
-        return "[D]" + super.toString() + " (by: " + displayDate + ")";
+        String formattedDisplayDate = (parsedDeadlineDate != null)
+                ? parsedDeadlineDate.format(DateTimeFormatter.ofPattern("MMM dd yyyy"))
+                : rawDeadlineString;
+        return "[D]" + super.toString() + " (by: " + formattedDisplayDate + ")";
     }
 }
