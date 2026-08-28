@@ -1,3 +1,11 @@
+package potato.command;
+
+import potato.exception.PotatoException;
+import potato.storage.Storage;
+import potato.task.Task;
+import potato.tasklist.TaskList;
+import potato.ui.Ui;
+
 public class MarkCommand extends Command {
     private final int index;
     private final boolean isDone;
