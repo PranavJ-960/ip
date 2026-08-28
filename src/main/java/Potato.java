@@ -1,3 +1,12 @@
+package potato;
+
+import potato.command.Command;
+import potato.exception.PotatoException;
+import potato.parser.Parser;
+import potato.storage.Storage;
+import potato.tasklist.TaskList;
+import potato.ui.Ui;
+
 public class Potato {
     private final Storage storage;
     private final TaskList tasks;

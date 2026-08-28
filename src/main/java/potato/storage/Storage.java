@@ -1,3 +1,5 @@
+package potato.storage;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -6,6 +8,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
+import potato.task.Deadline;
+import potato.task.Event;
+import potato.task.Task;
+import potato.task.Todo;
 
 public class Storage {
     private final String filePath;

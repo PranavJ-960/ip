@@ -1,4 +1,8 @@
+package potato.tasklist;
+
 import java.util.ArrayList;
+import potato.exception.PotatoException;
+import potato.task.Task;
 
 public class TaskList {
     private final ArrayList<Task> tasks;

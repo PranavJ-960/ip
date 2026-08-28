@@ -1,4 +1,8 @@
+package potato.ui;
+
 import java.util.Scanner;
+import potato.task.Task;
+import potato.tasklist.TaskList;
 
 public class Ui {
     private static final String LINE = "____________________________________________________________";
