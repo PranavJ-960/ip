@@ -5,28 +5,28 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class Deadline extends Task {
-    protected String by;
-    protected LocalDate date;
+    protected String rawDeadlineString;
+    protected LocalDate parsedDeadlineDate;
 
-    public Deadline(String description, String by) {
+    public Deadline(String description, String rawDeadlineString) {
         super(description);
-        this.by = by;
+        this.rawDeadlineString = rawDeadlineString;
         try {
-            this.date = LocalDate.parse(by);
+            this.parsedDeadlineDate = LocalDate.parse(rawDeadlineString);
         } catch (DateTimeParseException e) {
-            this.date = null;
+            this.parsedDeadlineDate = null;
         }
     }
 
     public String getBy() {
-        return by;
+        return rawDeadlineString;
     }
 
     @Override
     public String toString() {
-        String displayDate = (date != null)
-                ? date.format(DateTimeFormatter.ofPattern("MMM dd yyyy"))
-                : by;
-        return "[D]" + super.toString() + " (by: " + displayDate + ")";
+        String formattedDisplayDate = (parsedDeadlineDate != null)
+                ? parsedDeadlineDate.format(DateTimeFormatter.ofPattern("MMM dd yyyy"))
+                : rawDeadlineString;
+        return "[D]" + super.toString() + " (by: " + formattedDisplayDate + ")";
     }
 }
