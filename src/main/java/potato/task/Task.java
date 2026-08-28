@@ -1,42 +1,19 @@
 package potato.task;
 
 /**
- * Represents an abstract task managed by the Potato application.
+ * Represents a generic task in the application.
  */
-public abstract class Task {
+public class Task {
     protected String description;
     protected boolean isDone;
 
     /**
-     * Constructs a {@code Task} with the given description.
+     * Constructs a {@code Task} with the specified description.
      *
-     * @param description Textual description of the task.
+     * @param description Task description.
      */
     public Task(String description) {
         this.description = description;
-        this.isDone = false;
-    }
-
-    /**
-     * Returns the status icon indicating whether the task is completed.
-     *
-     * @return {@code "X"} if done, or a single space {@code " "} if incomplete.
-     */
-    public String getStatusIcon() {
-        return (isDone ? "X" : " ");
-    }
-
-    /**
-     * Marks this task as completed.
-     */
-    public void markAsDone() {
-        this.isDone = true;
-    }
-
-    /**
-     * Marks this task as incomplete.
-     */
-    public void markAsUndone() {
         this.isDone = false;
     }
 
@@ -50,9 +27,32 @@ public abstract class Task {
     }
 
     /**
-     * Returns the string representation of the task status and description.
+     * Returns the completion status icon.
      *
-     * @return Formatted string representation of the task.
+     * @return {@code "X"} if done, or space {@code " "} if incomplete.
+     */
+    public String getStatusIcon() {
+        return (isDone ? "X" : " ");
+    }
+
+    /**
+     * Marks the task as completed.
+     */
+    public void markAsDone() {
+        this.isDone = true;
+    }
+
+    /**
+     * Marks the task as incomplete.
+     */
+    public void markAsUndone() {
+        this.isDone = false;
+    }
+
+    /**
+     * Returns the string representation of the task.
+     *
+     * @return Formatted task string.
      */
     @Override
     public String toString() {

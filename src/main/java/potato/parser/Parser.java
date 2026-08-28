@@ -1,11 +1,6 @@
 package potato.parser;
 
-import potato.command.AddCommand;
-import potato.command.Command;
-import potato.command.DeleteCommand;
-import potato.command.ExitCommand;
-import potato.command.ListCommand;
-import potato.command.MarkCommand;
+import potato.command.*;
 import potato.exception.PotatoException;
 import potato.task.Deadline;
 import potato.task.Event;
@@ -20,7 +15,7 @@ public class Parser {
      * Enumerates supported command types and provides parsing from input strings.
      */
     private enum CommandType {
-        BYE, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, UNKNOWN;
+        BYE, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, FIND, UNKNOWN;
 
         /**
          * Parses a raw word into a corresponding {@code CommandType}.
@@ -71,6 +66,11 @@ public class Parser {
                 return parseDeadline(arguments);
             case EVENT:
                 return parseEvent(arguments);
+            case FIND:
+                if (arguments.isEmpty()) {
+                    throw new PotatoException("OOPS!!! The description of a find command cannot be empty.");
+                }
+                return new FindCommand(arguments);
             default:
                 throw new PotatoException("OOPS!!! I'm sorry, but I don't know what that means :-(");
         }
