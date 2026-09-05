@@ -1,6 +1,7 @@
 package potato.ui;
 
 import java.util.Scanner;
+
 import potato.task.Task;
 import potato.tasklist.TaskList;
 
@@ -9,6 +10,9 @@ import potato.tasklist.TaskList;
  */
 public class Ui {
     private static final String LINE = "____________________________________________________________";
+    private static final String OUTPUT_SEPARATOR = LINE;
+    private static final String OUTPUT_INDENTATION = "  ";
+
     private final Scanner scanner;
 
     /**
@@ -28,10 +32,7 @@ public class Ui {
                 + "|  __/| |_| || |/ ___ \\| || |_| |\n"
                 + "|_|    \\___/ |_|/_/   \\_\\_| \\___/\n";
         System.out.println("Hello from\n" + logo);
-        showLine();
-        System.out.println("Hello! I'm Potato.");
-        System.out.println("What can I do for you?");
-        showLine();
+        showMessages("Hello! I'm Potato.", "What can I do for you?");
     }
 
     /**
@@ -51,10 +52,23 @@ public class Ui {
     }
 
     /**
+     * Displays one or more messages framed by separator lines using Java Varargs.
+     *
+     * @param messages Lines of text to print.
+     */
+    public void showMessages(String... messages) {
+        System.out.println(OUTPUT_SEPARATOR);
+        for (String message : messages) {
+            System.out.println(OUTPUT_INDENTATION + message);
+        }
+        System.out.println(OUTPUT_SEPARATOR);
+    }
+
+    /**
      * Displays the farewell message upon exiting the application.
      */
     public void showGoodbye() {
-        System.out.println("Alrighty!! Byebye. \nHope to see you again soon!");
+        showMessages("Alrighty!! Byebye.", "Hope to see you again soon!");
     }
 
     /**
@@ -63,13 +77,15 @@ public class Ui {
      * @param tasks Task list containing items to display.
      */
     public void showTaskList(TaskList tasks) {
-        System.out.println("Here are the tasks in your list:");
+        showLine();
+        System.out.println(OUTPUT_INDENTATION + "Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
             try {
-                System.out.println((i + 1) + "." + tasks.get(i));
+                System.out.println(OUTPUT_INDENTATION + (i + 1) + "." + tasks.get(i));
             } catch (Exception ignored) {
             }
         }
+        showLine();
     }
 
     /**
@@ -79,9 +95,11 @@ public class Ui {
      * @param count Total count of tasks remaining in the list.
      */
     public void showTaskAdded(Task task, int count) {
-        System.out.println("Yessir. I've added this task:");
-        System.out.println("  " + task);
-        System.out.println("Now you have " + count + " tasks in the list.");
+        showMessages(
+                "Yessir. I've added this task:",
+                "  " + task,
+                "Now you have " + count + " tasks in the list."
+        );
     }
 
     /**
@@ -91,9 +109,11 @@ public class Ui {
      * @param count Total count of tasks remaining in the list.
      */
     public void showTaskRemoved(Task task, int count) {
-        System.out.println("Noted. I've removed this task:");
-        System.out.println("  " + task);
-        System.out.println("Now you have " + count + " tasks in the list.");
+        showMessages(
+                "Noted. I've removed this task:",
+                "  " + task,
+                "Now you have " + count + " tasks in the list."
+        );
     }
 
     /**
@@ -102,8 +122,10 @@ public class Ui {
      * @param task Completed task.
      */
     public void showTaskMarked(Task task) {
-        System.out.println("Nice! I've marked this task as done:");
-        System.out.println("  " + task);
+        showMessages(
+                "Nice! I've marked this task as done:",
+                "  " + task
+        );
     }
 
     /**
@@ -112,8 +134,10 @@ public class Ui {
      * @param task Incomplete task.
      */
     public void showTaskUnmarked(Task task) {
-        System.out.println("OK, I've marked this task as not done yet:");
-        System.out.println("  " + task);
+        showMessages(
+                "OK, I've marked this task as not done yet:",
+                "  " + task
+        );
     }
 
     /**
@@ -122,7 +146,7 @@ public class Ui {
      * @param message Error description to display.
      */
     public void showError(String message) {
-        System.out.println(message);
+        showMessages(message);
     }
 
     /**
