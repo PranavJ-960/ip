@@ -7,17 +7,51 @@ import potato.storage.Storage;
 import potato.tasklist.TaskList;
 import potato.ui.Ui;
 
+/**
+ * Main logic class for the Potato task manager application.
+ */
 public class Potato {
     private final Storage storage;
-    private final TaskList tasks;
+    private TaskList tasks;
     private final Ui ui;
 
+    /**
+     * Initializes Potato with a storage file path.
+     *
+     * @param filePath File path for task data storage.
+     */
     public Potato(String filePath) {
         ui = new Ui();
         storage = new Storage(filePath);
-        tasks = new TaskList(storage.load());
+        try {
+            tasks = new TaskList(storage.load());
+        } catch (Exception e) {
+            tasks = new TaskList();
+        }
     }
 
+    /**
+     * Generates a response string for the JavaFX GUI given user input.
+     *
+     * @param input Raw user command line.
+     * @return String response output from executing the command.
+     */
+    public String getResponse(String input) {
+        if (input == null || input.trim().isEmpty()) {
+            return "Please enter a valid command!";
+        }
+        try {
+            Command command = Parser.parse(input);
+            command.execute(tasks, ui, storage);
+            return ui.getAndClearResponse();
+        } catch (PotatoException e) {
+            return e.getMessage();
+        }
+    }
+
+    /**
+     * Runs the command-line interface version of the application.
+     */
     public void run() {
         ui.showWelcome();
         boolean isExit = false;
@@ -40,6 +74,16 @@ public class Potato {
             }
         }
         ui.closeScanner();
+    }
+
+    /**
+     * Generates the welcome message string for the GUI initialization.
+     *
+     * @return Formatted welcome greeting.
+     */
+    public String getWelcomeMessage() {
+        ui.showWelcome();
+        return ui.getAndClearResponse();
     }
 
     public static void main(String[] args) {
