@@ -13,7 +13,7 @@ public class DeadlineTest {
      * Tests that string representation formats a valid ISO date into 'MMM dd yyyy'.
      */
     @Test
-    public void toString_validDate_formattedCorrectly() {
+    public void toStringValidDateFormattedCorrectly() {
         Deadline deadline = new Deadline("return book", "2026-09-15");
         assertEquals("[D][ ] return book (by: Sept 15 2026)", deadline.toString());
     }
@@ -22,7 +22,7 @@ public class DeadlineTest {
      * Tests that string representation falls back to raw string when input date is non-ISO format.
      */
     @Test
-    public void toString_invalidDateFormat_returnsRawString() {
+    public void toStringInvalidDateFormatReturnsRawString() {
         Deadline deadline = new Deadline("return book", "Sunday");
         assertEquals("[D][ ] return book (by: Sunday)", deadline.toString());
     }
@@ -31,7 +31,7 @@ public class DeadlineTest {
      * Tests that {@code getBy()} returns the exact raw deadline string passed to the constructor.
      */
     @Test
-    public void getBy_validInput_returnsByString() {
+    public void getByValidInputReturnsByString() {
         Deadline deadline = new Deadline("return book", "2026-09-15");
         assertEquals("2026-09-15", deadline.getBy());
     }
