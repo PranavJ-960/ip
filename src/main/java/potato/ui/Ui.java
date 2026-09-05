@@ -2,157 +2,165 @@ package potato.ui;
 
 import java.util.Scanner;
 
+import potato.exception.PotatoException;
 import potato.task.Task;
 import potato.tasklist.TaskList;
 
 /**
- * Handles user interface operations such as reading input and displaying messages.
+ * Handles user interaction and response formatting for CLI and GUI modes.
  */
 public class Ui {
-    private static final String LINE = "____________________________________________________________";
-    private static final String OUTPUT_SEPARATOR = LINE;
-    private static final String OUTPUT_INDENTATION = "  ";
-
     private final Scanner scanner;
+    private String responseBuffer = "";
 
     /**
-     * Constructs a {@code Ui} instance and initializes the input scanner.
+     * Constructs a {@code Ui} instance initializing standard input scanner.
      */
     public Ui() {
         this.scanner = new Scanner(System.in);
     }
 
     /**
-     * Displays the logo and welcome message when the application launches.
-     */
-    public void showWelcome() {
-        String logo = " ____   ___ _____  _  _____ ___  \n"
-                + "|  _ \\ / _ \\_   _|/ \\|_   _/ _ \\ \n"
-                + "| |_) | | | || | / _ \\ | || | | |\n"
-                + "|  __/| |_| || |/ ___ \\| || |_| |\n"
-                + "|_|    \\___/ |_|/_/   \\_\\_| \\___/\n";
-        System.out.println("Hello from\n" + logo);
-        showMessages("Hello! I'm Potato.", "What can I do for you?");
-    }
-
-    /**
-     * Prints a horizontal divider line.
-     */
-    public void showLine() {
-        System.out.println(LINE);
-    }
-
-    /**
-     * Reads and returns the next line of input entered by the user.
+     * Appends a message line to standard output and the internal response buffer.
      *
-     * @return Trimmed line of user command text.
+     * @param message Text to display.
+     */
+    public void showMessage(String message) {
+        System.out.println(message);
+        responseBuffer += message + "\n";
+    }
+
+    /**
+     * Retrieves and clears the accumulated output string for JavaFX GUI rendering.
+     *
+     * @return Full text output produced during command execution.
+     */
+    public String getAndClearResponse() {
+        String response = responseBuffer.trim();
+        responseBuffer = "";
+        return response;
+    }
+
+    /**
+     * Reads a full line of user input from standard console input.
+     *
+     * @return Trimmed input string.
      */
     public String readCommand() {
-        return scanner.nextLine().trim();
-    }
-
-    /**
-     * Displays one or more messages framed by separator lines using Java Varargs.
-     *
-     * @param messages Lines of text to print.
-     */
-    public void showMessages(String... messages) {
-        System.out.println(OUTPUT_SEPARATOR);
-        for (String message : messages) {
-            System.out.println(OUTPUT_INDENTATION + message);
+        if (scanner.hasNextLine()) {
+            return scanner.nextLine().trim();
         }
-        System.out.println(OUTPUT_SEPARATOR);
+        return "";
     }
 
     /**
-     * Displays the farewell message upon exiting the application.
-     */
-    public void showGoodbye() {
-        showMessages("Alrighty!! Byebye.", "Hope to see you again soon!");
-    }
-
-    /**
-     * Displays all tasks currently contained in the task list.
-     *
-     * @param tasks Task list containing items to display.
-     */
-    public void showTaskList(TaskList tasks) {
-        showLine();
-        System.out.println(OUTPUT_INDENTATION + "Here are the tasks in your list:");
-        for (int i = 0; i < tasks.size(); i++) {
-            try {
-                System.out.println(OUTPUT_INDENTATION + (i + 1) + "." + tasks.get(i));
-            } catch (Exception ignored) {
-            }
-        }
-        showLine();
-    }
-
-    /**
-     * Displays notification when a new task has been added.
-     *
-     * @param task Added task.
-     * @param count Total count of tasks remaining in the list.
-     */
-    public void showTaskAdded(Task task, int count) {
-        showMessages(
-                "Yessir. I've added this task:",
-                "  " + task,
-                "Now you have " + count + " tasks in the list."
-        );
-    }
-
-    /**
-     * Displays notification when a task is removed.
-     *
-     * @param task Removed task.
-     * @param count Total count of tasks remaining in the list.
-     */
-    public void showTaskRemoved(Task task, int count) {
-        showMessages(
-                "Noted. I've removed this task:",
-                "  " + task,
-                "Now you have " + count + " tasks in the list."
-        );
-    }
-
-    /**
-     * Displays notification when a task is marked as completed.
-     *
-     * @param task Completed task.
-     */
-    public void showTaskMarked(Task task) {
-        showMessages(
-                "Nice! I've marked this task as done:",
-                "  " + task
-        );
-    }
-
-    /**
-     * Displays notification when a task is marked as incomplete.
-     *
-     * @param task Incomplete task.
-     */
-    public void showTaskUnmarked(Task task) {
-        showMessages(
-                "OK, I've marked this task as not done yet:",
-                "  " + task
-        );
-    }
-
-    /**
-     * Displays an error message string.
-     *
-     * @param message Error description to display.
-     */
-    public void showError(String message) {
-        showMessages(message);
-    }
-
-    /**
-     * Closes the underlying scanner resource.
+     * Closes the underlying input scanner.
      */
     public void closeScanner() {
         scanner.close();
+    }
+
+    /**
+     * Displays a decorative divider line.
+     */
+    public void showLine() {
+        showMessage("____________________________________________________________");
+    }
+
+    /**
+     * Displays the welcome ASCII banner and initial greeting message.
+     */
+    public void showWelcome() {
+        String logo = " ____       _        _        \n"
+                + "|  _ \\ ___ | |_ __ _| |_ ___  \n"
+                + "| |_) / _ \\| __/ _` | __/ _ \\ \n"
+                + "|  __/ (_) | || (_| | || (_) |\n"
+                + "|_|   \\___/ \\__\\__,_|\\__\\___/ ";
+        showMessage("Hello from\n" + logo);
+        showLine();
+        showMessage("Hello! I'm Potato. Mr Potato.");
+        showMessage("What can this Potato do for you?");
+        showLine();
+    }
+
+    /**
+     * Displays an error message.
+     *
+     * @param error Error description.
+     */
+    public void showError(String error) {
+        showMessage(error);
+    }
+
+    /**
+     * Displays formatted list of tasks contained in task list.
+     *
+     * @param tasks Task list collection to print.
+     */
+    public void showTaskList(TaskList tasks) {
+        if (tasks.size() == 0) {
+            showMessage("There are no tasks in your list.");
+            return;
+        }
+
+        try {
+            StringBuilder sb = new StringBuilder("Here are the tasks in your list:\n");
+            for (int i = 0; i < tasks.size(); i++) {
+                sb.append(i + 1).append(".").append(tasks.get(i));
+                if (i < tasks.size() - 1) {
+                    sb.append("\n");
+                }
+            }
+            showMessage(sb.toString());
+        } catch (PotatoException e) {
+            showError("Error displaying task list: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Displays task added confirmation.
+     *
+     * @param task Added task.
+     * @param totalTasks Updated task count.
+     */
+    public void showTaskAdded(Task task, int totalTasks) {
+        showMessage("Yessir. I've added this task:\n  " + task);
+        showMessage("Now you have " + totalTasks + " tasks in the list.");
+    }
+
+    /**
+     * Displays task marked done confirmation.
+     *
+     * @param task Marked task.
+     */
+    public void showTaskMarked(Task task) {
+        showMessage("Nice! I've marked this task as done:\n  " + task);
+    }
+
+    /**
+     * Displays task unmarked confirmation.
+     *
+     * @param task Unmarked task.
+     */
+    public void showTaskUnmarked(Task task) {
+        showMessage("OK, I've marked this task as not done yet:\n  " + task);
+    }
+
+    /**
+     * Displays task removed confirmation for DeleteCommand.
+     *
+     * @param task Removed task.
+     * @param totalTasks Remaining task count.
+     */
+    public void showTaskRemoved(Task task, int totalTasks) {
+        showMessage("Good going! I've removed this task:\n  " + task);
+        showMessage("Now you have " + totalTasks + " tasks in the list.");
+    }
+
+    /**
+     * Displays exit message for ExitCommand.
+     */
+    public void showGoodbye() {
+        showMessage("Byebye. Hope to see you again soon, fellow Potato!");
     }
 }
