@@ -1,6 +1,8 @@
 package potato.tasklist;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import potato.exception.PotatoException;
 import potato.task.Task;
@@ -26,6 +28,20 @@ public class TaskList {
      */
     public TaskList() {
         this.tasks = new ArrayList<>();
+    }
+
+    /**
+     * Filters tasks matching a keyword using Java Streams.
+     *
+     * @param keyword Search term to match against task descriptions.
+     * @return New {@code TaskList} containing matching tasks.
+     */
+    public TaskList findMatchingTasks(String keyword) {
+        List<Task> matchingTasks = tasks.stream()
+                .filter(task -> task.getDescription().toLowerCase().contains(keyword.toLowerCase()))
+                .collect(Collectors.toList());
+
+        return new TaskList(new ArrayList<>(matchingTasks));
     }
 
     /**
