@@ -1,15 +1,12 @@
 package potato.command;
 
-import java.util.ArrayList;
-
 import potato.exception.PotatoException;
 import potato.storage.Storage;
-import potato.task.Task;
 import potato.tasklist.TaskList;
 import potato.ui.Ui;
 
 /**
- * Command to search for tasks containing a specific keyword.
+ * Command to search for tasks containing a specific keyword using Java Streams.
  */
 public class FindCommand extends Command {
     private final String keyword;
@@ -25,16 +22,10 @@ public class FindCommand extends Command {
 
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws PotatoException {
-        ArrayList<Task> matchingTasks = new ArrayList<>();
-        for (int i = 0; i < tasks.size(); i++) {
-            Task task = tasks.get(i);
-            if (task.getDescription().toLowerCase().contains(keyword)) {
-                matchingTasks.add(task);
-            }
-        }
+        TaskList matchingTasks = tasks.findMatchingTasks(keyword);
 
         ui.showLine();
-        if (matchingTasks.isEmpty()) {
+        if (matchingTasks.size() == 0) {
             System.out.println(" No matching tasks found in your list.");
         } else {
             System.out.println(" Here are the matching tasks in your list:");
