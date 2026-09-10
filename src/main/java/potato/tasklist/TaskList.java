@@ -1,6 +1,7 @@
 package potato.tasklist;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -104,6 +105,15 @@ public class TaskList {
     public int size() {
         assert tasks != null : "Internal tasks list should never be null when checking size";
         return tasks.size();
+    }
+
+    /**
+     * Sorts tasks using the provided comparator.
+     *
+     * @param comparator Comparator for ordering tasks.
+     */
+    public void sortTasks(Comparator<Task> comparator) {
+        tasks.sort(comparator);
     }
 
     /**
