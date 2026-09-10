@@ -1,6 +1,7 @@
 package potato.tasklist;
 
 import java.util.ArrayList;
+
 import potato.exception.PotatoException;
 import potato.task.Task;
 
@@ -16,6 +17,7 @@ public class TaskList {
      * @param tasks Initial list of tasks.
      */
     public TaskList(ArrayList<Task> tasks) {
+        assert tasks != null : "Initial task list collection must not be null";
         this.tasks = tasks;
     }
 
@@ -32,6 +34,7 @@ public class TaskList {
      * @return {@code ArrayList} containing all tasks.
      */
     public ArrayList<Task> getTasks() {
+        assert tasks != null : "Internal tasks list should never be null";
         return tasks;
     }
 
@@ -41,7 +44,10 @@ public class TaskList {
      * @param task Task to be added.
      */
     public void add(Task task) {
+        assert task != null : "Cannot add a null task to TaskList";
+        int previousSize = tasks.size();
         tasks.add(task);
+        assert tasks.size() == previousSize + 1 : "Task list size should increment by 1 after adding a task";
     }
 
     /**
@@ -55,7 +61,11 @@ public class TaskList {
         if (index < 0 || index >= tasks.size()) {
             throw new PotatoException("OOPS!!! Task number " + (index + 1) + " does not exist.");
         }
-        return tasks.remove(index);
+        int previousSize = tasks.size();
+        Task removedTask = tasks.remove(index);
+        assert removedTask != null : "Removed task should not be null";
+        assert tasks.size() == previousSize - 1 : "Task list size should decrement by 1 after removal";
+        return removedTask;
     }
 
     /**
@@ -69,7 +79,9 @@ public class TaskList {
         if (index < 0 || index >= tasks.size()) {
             throw new PotatoException("OOPS!!! Task number " + (index + 1) + " does not exist.");
         }
-        return tasks.get(index);
+        Task retrievedTask = tasks.get(index);
+        assert retrievedTask != null : "Retrieved task at valid index should not be null";
+        return retrievedTask;
     }
 
     /**
@@ -78,6 +90,7 @@ public class TaskList {
      * @return Total task count.
      */
     public int size() {
+        assert tasks != null : "Internal tasks list should never be null when checking size";
         return tasks.size();
     }
 }

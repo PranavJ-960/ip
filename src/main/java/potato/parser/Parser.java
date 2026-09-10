@@ -30,6 +30,7 @@ public class Parser {
          * @return Matched {@code CommandType}, or {@code UNKNOWN} if invalid.
          */
         public static CommandType parse(String word) {
+            assert word != null : "Word to parse in CommandType should not be null";
             try {
                 return CommandType.valueOf(word.toUpperCase());
             } catch (IllegalArgumentException e) {
@@ -46,9 +47,14 @@ public class Parser {
      * @throws PotatoException If input is unknown or required arguments are missing/malformed.
      */
     public static Command parse(String fullCommand) throws PotatoException {
-        String[] words = fullCommand.trim().split(" ", 2);
+        assert fullCommand != null : "Command string passed to Parser should not be null";
+
+        String trimmedCommand = fullCommand.trim();
+        String[] words = trimmedCommand.split(" ", 2);
         String commandWord = words[0];
         String arguments = words.length > 1 ? words[1].trim() : "";
+
+        assert !commandWord.isEmpty() || trimmedCommand.isEmpty() : "Command word should not be empty unless input is empty";
 
         CommandType type = CommandType.parse(commandWord);
 
@@ -91,11 +97,15 @@ public class Parser {
      * @throws PotatoException If index string is empty or invalid.
      */
     private static int parseIndex(String arg, String command) throws PotatoException {
+        assert arg != null : "Argument string passed to parseIndex should not be null";
+        assert command != null : "Command name passed to parseIndex should not be null";
+
         if (arg.isEmpty()) {
             throw new PotatoException("OOPS!!! Please provide a task number to " + command + ".");
         }
         try {
-            return Integer.parseInt(arg) - 1;
+            int parsedIndex = Integer.parseInt(arg) - 1;
+            return parsedIndex;
         } catch (NumberFormatException e) {
             throw new PotatoException("OOPS!!! Please specify a valid integer task number.");
         }
@@ -109,6 +119,8 @@ public class Parser {
      * @throws PotatoException If description or deadline target date is missing.
      */
     private static Command parseDeadline(String arguments) throws PotatoException {
+        assert arguments != null : "Arguments passed to parseDeadline should not be null";
+
         if (arguments.isEmpty()) {
             throw new PotatoException("OOPS!!! The description of a deadline cannot be empty.");
         }
@@ -127,6 +139,8 @@ public class Parser {
      * @throws PotatoException If description, start time, or end time is missing.
      */
     private static Command parseEvent(String arguments) throws PotatoException {
+        assert arguments != null : "Arguments passed to parseEvent should not be null";
+
         if (arguments.isEmpty()) {
             throw new PotatoException("OOPS!!! The description of an event cannot be empty.");
         }
