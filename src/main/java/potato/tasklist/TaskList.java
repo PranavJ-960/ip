@@ -1,6 +1,8 @@
 package potato.tasklist;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+
 import potato.exception.PotatoException;
 import potato.task.Task;
 
@@ -79,5 +81,14 @@ public class TaskList {
      */
     public int size() {
         return tasks.size();
+    }
+
+    /**
+     * Sorts tasks using the provided comparator.
+     *
+     * @param comparator Comparator for ordering tasks.
+     */
+    public void sortTasks(Comparator<Task> comparator) {
+        tasks.sort(comparator);
     }
 }
