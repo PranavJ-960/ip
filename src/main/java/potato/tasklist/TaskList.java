@@ -1,6 +1,7 @@
 package potato.tasklist;
 
 import java.util.ArrayList;
+
 import potato.exception.PotatoException;
 import potato.task.Task;
 
@@ -52,9 +53,7 @@ public class TaskList {
      * @throws PotatoException If the index is out of bounds.
      */
     public Task remove(int index) throws PotatoException {
-        if (index < 0 || index >= tasks.size()) {
-            throw new PotatoException("OOPS!!! Task number " + (index + 1) + " does not exist.");
-        }
+        validateIndex(index);
         return tasks.remove(index);
     }
 
@@ -66,9 +65,7 @@ public class TaskList {
      * @throws PotatoException If the index is out of bounds.
      */
     public Task get(int index) throws PotatoException {
-        if (index < 0 || index >= tasks.size()) {
-            throw new PotatoException("OOPS!!! Task number " + (index + 1) + " does not exist.");
-        }
+        validateIndex(index);
         return tasks.get(index);
     }
 
@@ -79,5 +76,17 @@ public class TaskList {
      */
     public int size() {
         return tasks.size();
+    }
+
+    /**
+     * Validates if the specified index is within valid task list bounds.
+     *
+     * @param index Zero-based index to check.
+     * @throws PotatoException If the index is less than 0 or greater than/equal to size.
+     */
+    private void validateIndex(int index) throws PotatoException {
+        if (index < 0 || index >= tasks.size()) {
+            throw new PotatoException("OOPS!!! Task number " + (index + 1) + " does not exist.");
+        }
     }
 }
