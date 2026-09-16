@@ -149,7 +149,7 @@ Format: `bye`
 
 ### Saving the data
 
-Potato automatically saves your tasks to disk after every command that changes the list (adding, deleting, marking, sorting). There's no need to save manually.
+Potato automatically saves your tasks to disk after every command that changes the list (adding, deleting, marking, sorting). Manual saving is not required.
 
 ### Editing the data file
 
@@ -163,7 +163,7 @@ Potato's data is stored in `[JAR file location]/data/potato.txt` as a plain text
 A: Install Potato on the other computer, then copy over the `data/potato.txt` file it created into the same `data/` folder on the new computer.
 
 **Q: Chef Patate is shouting at me — did I do something wrong?**
-A: Probably just a typo or a missing detail (like a `/by` date). Read the message — it'll tell you what's missing. Your other tasks are safe either way.
+A: Usually, this means the command contains a typo or is missing required information(like a `/by` date). Read the message — it'll tell you what's missing. Your other tasks are safe either way.
 
 ## Command Summary
 
