@@ -30,21 +30,34 @@ public class MainWindow extends AnchorPane {
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        this.getStylesheets().add(getClass().getResource("/view/dialog.css").toExternalForm());
     }
 
     public void setPotato(Potato p) {
         potato = p;
         String welcome = potato.getWelcomeMessage();
-        dialogContainer.getChildren().add(DialogBox.getPotatoDialog(welcome, potatoImage));
+        dialogContainer.getChildren().add(DialogBox.getPotatoDialog(welcome, potatoImage, false));
     }
 
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
-        String response = potato.getResponse(input);
+        if (input.trim().isEmpty()) {
+            return;
+        }
+
+        boolean isError = false;
+        String response;
+        try {
+            response = potato.getResponse(input);
+        } catch (Exception e) {
+            response = e.getMessage();
+            isError = true;
+        }
+
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getPotatoDialog(response, potatoImage)
+                DialogBox.getPotatoDialog(response, potatoImage, isError)
         );
         userInput.clear();
     }

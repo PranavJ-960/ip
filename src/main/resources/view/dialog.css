@@ -1,0 +1,52 @@
+/* Main window dark background */
+.root {
+    -fx-background-color: #1e1e1e;
+}
+
+/* ScrollPane dark background */
+.scroll-pane {
+    -fx-background-color: #1e1e1e;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: #1e1e1e;
+}
+
+.scroll-pane .content {
+    -fx-background-color: #1e1e1e;
+}
+
+/* User Speech Bubble */
+.user-label {
+    -fx-background-color: #0084ff;
+    -fx-text-fill: white;
+    -fx-background-radius: 15px 15px 0px 15px;
+}
+
+/* Bot Response Bubble */
+.reply-label {
+    -fx-background-color: #3e3e42;
+    -fx-text-fill: #e1e1e1;
+    -fx-background-radius: 15px 15px 15px 0px;
+}
+
+/* Error Response Styling */
+.error-label {
+    -fx-background-color: #6d1b1b !important;
+    -fx-text-fill: #ffb3b3 !important;
+    -fx-border-color: #ff4d4d;
+    -fx-border-radius: 15px 15px 15px 0px;
+    -fx-background-radius: 15px 15px 15px 0px;
+}
+
+/* Text Input & Button Dark Styling */
+.text-field {
+    -fx-background-color: #2d2d30;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #888888;
+}
+
+.button {
+    -fx-background-color: #0084ff;
+    -fx-text-fill: white;
+}

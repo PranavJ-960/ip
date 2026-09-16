@@ -13,14 +13,15 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.shape.Circle;
 
 /**
- * Custom HBox control representing a chat dialog bubble with text and avatar image.
+ * Custom control representing a dialog box consisting of an Avatar and Text label.
  */
 public class DialogBox extends HBox {
     @FXML
     private Label dialog;
-
     @FXML
     private ImageView displayPicture;
 
@@ -36,10 +37,24 @@ public class DialogBox extends HBox {
 
         dialog.setText(text);
         displayPicture.setImage(img);
+
+        // Enforce 40x40 container size
+        displayPicture.setFitWidth(40.0);
+        displayPicture.setFitHeight(40.0);
+
+        // Dynamic clip bound to fitWidth and fitHeight (fixes semi-circle clipping)
+        Circle clip = new Circle();
+        clip.centerXProperty().bind(displayPicture.fitWidthProperty().divide(2));
+        clip.centerYProperty().bind(displayPicture.fitHeightProperty().divide(2));
+        clip.radiusProperty().bind(displayPicture.fitWidthProperty().divide(2));
+        displayPicture.setClip(clip);
+
+        // Ensure text expands fully without clipping
+        dialog.setMinHeight(Region.USE_PREF_SIZE);
     }
 
     /**
-     * Flips the dialog box orientation to align speech bubbles on the left for Potato.
+     * Flips the dialog box such that the ImageView is on the left and text on the right.
      */
     private void flip() {
         ObservableList<Node> tmp = FXCollections.observableArrayList(this.getChildren());
@@ -49,26 +64,41 @@ public class DialogBox extends HBox {
     }
 
     /**
-     * Creates a user dialog box aligned to the right.
+     * Factory method for creating user dialog boxes.
      *
-     * @param text User message.
-     * @param img User avatar.
+     * @param text Message text.
+     * @param img User avatar image.
      * @return Formatted DialogBox instance.
      */
     public static DialogBox getUserDialog(String text, Image img) {
-        return new DialogBox(text, img);
+        var db = new DialogBox(text, img);
+        db.dialog.getStyleClass().add("user-label");
+        return db;
     }
 
     /**
-     * Creates a Potato dialog box aligned to the left.
+     * Factory method for creating Potato bot response dialog boxes.
      *
-     * @param text Potato response message.
-     * @param img Potato avatar.
+     * @param text Response text.
+     * @param img Bot avatar image.
+     * @param isError True if the message represents an error/exception.
      * @return Formatted DialogBox instance.
      */
-    public static DialogBox getPotatoDialog(String text, Image img) {
+    public static DialogBox getPotatoDialog(String text, Image img, boolean isError) {
         var db = new DialogBox(text, img);
         db.flip();
+        if (isError) {
+            db.dialog.getStyleClass().add("error-label");
+        } else {
+            db.dialog.getStyleClass().add("reply-label");
+        }
         return db;
+    }
+
+    /**
+     * Convenience overload for standard non-error bot responses.
+     */
+    public static DialogBox getPotatoDialog(String text, Image img) {
+        return getPotatoDialog(text, img, false);
     }
 }
