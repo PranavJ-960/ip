@@ -183,4 +183,4 @@ A: Probably just a typo or a missing detail (like a `/by` date). Read the messag
 
 * **JavaFX Tutorial & Scaffolding**: Adapted from the [CS2103/T SE-EDU JavaFX Tutorial](https://se-education.org/guides/tutorials/javaFx.html).
 * **Circular Avatar Clipping**: The JavaFX node clip-binding technique used in `DialogBox.java` was adapted from ["Round images with JavaFX" by Hendrik Ebbers](https://guigarage.com/2015/11/round-images-with-javafx/).
-* **AI Collaboration**: AI assistance was utilized during development to help draft documentation structures, debug date parsing logic, and optimize code patterns.
+* **AI Collaboration**: AI assistance was utilized during development.
