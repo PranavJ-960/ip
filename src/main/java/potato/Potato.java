@@ -38,7 +38,7 @@ public class Potato {
      */
     public String getResponse(String input) {
         if (input == null || input.trim().isEmpty()) {
-            return "Please enter a valid command!";
+            return "MON DIEU! Do not stand there silently! Order a task!";
         }
         try {
             Command command = Parser.parse(input);

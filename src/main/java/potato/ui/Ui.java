@@ -7,7 +7,7 @@ import potato.task.Task;
 import potato.tasklist.TaskList;
 
 /**
- * Handles user interaction and response formatting for CLI and GUI modes.
+ * Handles user interaction and response formatting with Chef Patate's personality.
  */
 public class Ui {
     private final Scanner scanner;
@@ -78,8 +78,8 @@ public class Ui {
                 + "|_|   \\___/ \\__\\__,_|\\__\\___/ ";
         showMessage("Hello from\n" + logo);
         showLine();
-        showMessage("Hello! I'm Potato. Mr Potato.");
-        showMessage("What can this Potato do for you?");
+        showMessage("HELL-O! I am Chef Patate.");
+        showMessage("Your task list is an absolute mess! Show me the brigade board before we burn down the kitchen!");
         showLine();
     }
 
@@ -89,7 +89,7 @@ public class Ui {
      * @param error Error description.
      */
     public void showError(String error) {
-        showMessage(error);
+        showMessage("SACREBLEU! " + error);
     }
 
     /**
@@ -99,12 +99,12 @@ public class Ui {
      */
     public void showTaskList(TaskList tasks) {
         if (tasks.size() == 0) {
-            showMessage("There are no tasks in your list.");
+            showMessage("MON DIEU! There is nothing on the order board! Get to work!");
             return;
         }
 
         try {
-            StringBuilder sb = new StringBuilder("Here are the tasks in your list:\n");
+            StringBuilder sb = new StringBuilder("Here is the brigade order list, hurry up:\n");
             for (int i = 0; i < tasks.size(); i++) {
                 sb.append(i + 1).append(".").append(tasks.get(i));
                 if (i < tasks.size() - 1) {
@@ -124,8 +124,8 @@ public class Ui {
      * @param totalTasks Updated task count.
      */
     public void showTaskAdded(Task task, int totalTasks) {
-        showMessage("Yessir. I've added this task:\n  " + task);
-        showMessage("Now you have " + totalTasks + " tasks in the list.");
+        showMessage("Oui! Added to the prep station:\n  " + task);
+        showMessage("Now you have " + totalTasks + " orders pending in the kitchen!");
     }
 
     /**
@@ -134,7 +134,7 @@ public class Ui {
      * @param task Marked task.
      */
     public void showTaskMarked(Task task) {
-        showMessage("Nice! I've marked this task as done:\n  " + task);
+        showMessage("Magnifique! Dish completed and served:\n  " + task);
     }
 
     /**
@@ -143,7 +143,7 @@ public class Ui {
      * @param task Unmarked task.
      */
     public void showTaskUnmarked(Task task) {
-        showMessage("OK, I've marked this task as not done yet:\n  " + task);
+        showMessage("WHAT?! Sent back to the kitchen! This is not finished yet:\n  " + task);
     }
 
     /**
@@ -153,14 +153,14 @@ public class Ui {
      * @param totalTasks Remaining task count.
      */
     public void showTaskRemoved(Task task, int totalTasks) {
-        showMessage("Good going! I've removed this task:\n  " + task);
-        showMessage("Now you have " + totalTasks + " tasks in the list.");
+        showMessage("TRASH IT! Threw this disaster into the compost bin:\n  " + task);
+        showMessage("You still have " + totalTasks + " orders left on the board.");
     }
 
     /**
      * Displays exit message for ExitCommand.
      */
     public void showGoodbye() {
-        showMessage("Byebye. Hope to see you again soon, fellow Potato!");
+        showMessage("Finally, service is OVER! Get out of this potato's kitchen!");
     }
 }

@@ -72,7 +72,7 @@ public class Parser {
                 return new DeleteCommand(parseIndex(arguments, "delete"));
             case TODO:
                 if (arguments.isEmpty()) {
-                    throw new PotatoException("OOPS!!! The description of a todo cannot be empty.");
+                    throw new PotatoException("MON DIEU! You cannot give me an empty todo! Specify the ingredients!");
                 }
                 return new AddCommand(new Todo(arguments));
             case DEADLINE:
@@ -81,13 +81,13 @@ public class Parser {
                 return parseEvent(arguments);
             case FIND:
                 if (arguments.isEmpty()) {
-                    throw new PotatoException("OOPS!!! The description of a find command cannot be empty.");
+                    throw new PotatoException("MISERABLE! What keyword am I supposed to search for on the board?!");
                 }
                 return new FindCommand(arguments);
             case SORT:
                 return new SortCommand();
             default:
-                throw new PotatoException("OOPS!!! I'm sorry, but I don't know what that means :-(");
+                throw new PotatoException("SACREBLEU! What does '" + commandWord + "' even mean?! Speak clearly or leave the kitchen!");
         }
     }
 
@@ -104,12 +104,12 @@ public class Parser {
         assert command != null : "Command name passed to parseIndex should not be null";
 
         if (arg.isEmpty()) {
-            throw new PotatoException("OOPS!!! Please provide a task number to " + command + ".");
+            throw new PotatoException("MISERABLE! Specify the order number to " + command + "!");
         }
         try {
             return Integer.parseInt(arg) - 1;
         } catch (NumberFormatException e) {
-            throw new PotatoException("OOPS!!! Please specify a valid integer task number.");
+            throw new PotatoException("THAT IS NOT A NUMBER! Specify a valid integer order index!");
         }
     }
 
@@ -124,11 +124,11 @@ public class Parser {
         assert arguments != null : "Arguments passed to parseDeadline should not be null";
 
         if (arguments.isEmpty()) {
-            throw new PotatoException("OOPS!!! The description of a deadline cannot be empty.");
+            throw new PotatoException("MON DIEU! The description of a deadline cannot be empty!");
         }
         String[] parts = arguments.split(" /by ", 2);
         if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
-            throw new PotatoException("OOPS!!! Please specify a deadline using '/by <date/time>'.");
+            throw new PotatoException("INCOMPETENT! Specify the deadline using '/by <date/time>' or it will be SERVED COLD!");
         }
         return new AddCommand(new Deadline(parts[0].trim(), parts[1].trim()));
     }
@@ -144,15 +144,15 @@ public class Parser {
         assert arguments != null : "Arguments passed to parseEvent should not be null";
 
         if (arguments.isEmpty()) {
-            throw new PotatoException("OOPS!!! The description of an event cannot be empty.");
+            throw new PotatoException("MON DIEU! The description of an event cannot be empty!");
         }
         String[] parts = arguments.split(" /from ", 2);
         if (parts.length < 2 || parts[0].trim().isEmpty()) {
-            throw new PotatoException("OOPS!!! Please specify event timing using '/from <start> /to <end>'.");
+            throw new PotatoException("SACREBLEU! Specify event timing using '/from <start> /to <end>'!");
         }
         String[] timeParts = parts[1].split(" /to ", 2);
         if (timeParts.length < 2 || timeParts[0].trim().isEmpty() || timeParts[1].trim().isEmpty()) {
-            throw new PotatoException("OOPS!!! Please specify event end time using '/to <end>'.");
+            throw new PotatoException("SACREBLEU! Event is missing end time! Specify using '/to <end>'!");
         }
         return new AddCommand(new Event(parts[0].trim(), timeParts[0].trim(), timeParts[1].trim()));
     }

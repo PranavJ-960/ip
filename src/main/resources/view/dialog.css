@@ -1,52 +1,70 @@
-/* Main window dark background */
+/* Bistro Dark Background & Global Font */
 .root {
-    -fx-background-color: #1e1e1e;
+    -fx-background-color: #1a1818;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 13px;
 }
 
 /* ScrollPane dark background */
 .scroll-pane {
-    -fx-background-color: #1e1e1e;
+    -fx-background-color: #1a1818;
+    -fx-background: #1a1818;
 }
 
 .scroll-pane .viewport {
-    -fx-background-color: #1e1e1e;
+    -fx-background-color: #1a1818;
 }
 
 .scroll-pane .content {
-    -fx-background-color: #1e1e1e;
+    -fx-background-color: #1a1818;
 }
 
-/* User Speech Bubble */
+#dialogContainer {
+    -fx-background-color: #1a1818;
+}
+
+/* User Speech Bubble (Warm Copper) */
 .user-label {
-    -fx-background-color: #0084ff;
-    -fx-text-fill: white;
-    -fx-background-radius: 15px 15px 0px 15px;
+    -fx-background-color: #c86d3b;
+    -fx-text-fill: #ffffff;
+    -fx-background-radius: 12px 12px 2px 12px;
+    -fx-padding: 8px 12px 8px 12px;
 }
 
-/* Bot Response Bubble */
+/* Chef Patate Response Bubble (Dark Bistro) */
 .reply-label {
-    -fx-background-color: #3e3e42;
-    -fx-text-fill: #e1e1e1;
-    -fx-background-radius: 15px 15px 15px 0px;
+    -fx-background-color: #2a2424;
+    -fx-text-fill: #f0e6d2;
+    -fx-border-color: #5c2c2c;
+    -fx-border-radius: 12px 12px 12px 2px;
+    -fx-background-radius: 12px 12px 12px 2px;
+    -fx-padding: 8px 12px 8px 12px;
 }
 
-/* Error Response Styling */
+/* Severe Kitchen Error (Fiery Red) */
 .error-label {
-    -fx-background-color: #6d1b1b !important;
+    -fx-background-color: #4a0e0e !important;
     -fx-text-fill: #ffb3b3 !important;
-    -fx-border-color: #ff4d4d;
-    -fx-border-radius: 15px 15px 15px 0px;
-    -fx-background-radius: 15px 15px 15px 0px;
+    -fx-border-color: #e63946;
+    -fx-border-radius: 12px 12px 12px 2px;
+    -fx-background-radius: 12px 12px 12px 2px;
+    -fx-padding: 8px 12px 8px 12px;
 }
 
-/* Text Input & Button Dark Styling */
+/* Text Input & Button Styling */
 .text-field {
-    -fx-background-color: #2d2d30;
-    -fx-text-fill: white;
-    -fx-prompt-text-fill: #888888;
+    -fx-background-color: #262222;
+    -fx-text-fill: #f0e6d2;
+    -fx-prompt-text-fill: #8c7b75;
+    -fx-border-color: #3b3331;
 }
 
 .button {
-    -fx-background-color: #0084ff;
-    -fx-text-fill: white;
+    -fx-background-color: #c86d3b;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+}
+
+.button:hover {
+    -fx-background-color: #a8582d;
 }
