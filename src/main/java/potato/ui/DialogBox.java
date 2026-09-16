@@ -42,6 +42,8 @@ public class DialogBox extends HBox {
         displayPicture.setFitWidth(40.0);
         displayPicture.setFitHeight(40.0);
 
+        // Circular avatar clipping technique adapted from:
+        // https://guigarage.com/2015/11/round-images-with-javafx/
         // Dynamic clip bound to fitWidth and fitHeight (fixes semi-circle clipping)
         Circle clip = new Circle();
         clip.centerXProperty().bind(displayPicture.fitWidthProperty().divide(2));
