@@ -8,12 +8,9 @@ Potato is optimised for **typing commands** — if you're a fast typist, Potato 
 
 ## Why Potato?
 
-Potato turns task management into a playful kitchen experience. Chef Patate 
-helps organise your todos, deadlines, and events while adding personality to
-every interaction.
+Potato turns task management into a playful kitchen experience. Chef Patate helps organise your todos, deadlines, and events while adding personality to every interaction.
 
-The name reflects the idea that tasks are the ingredients, and Potato helps
-you prepare and organise them into a manageable order.
+The name reflects the idea that tasks are the ingredients, and Potato helps you prepare and organise them into a manageable order.
 
 ## Quick Start
 
