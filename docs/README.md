@@ -136,7 +136,8 @@ delete 3
 
 ### Sorting tasks: `sort`
 
-Sorts all tasks alphabetically by their description (A–Z, not case-sensitive).
+Sorts all tasks alphabetically by their description (A–Z, not case-sensitive). 
+Tie-breaker: goes to next character and if none left, last addition goes below.
 
 Format: `sort`
 
