@@ -1,6 +1,7 @@
 package potato.task;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
@@ -12,6 +13,15 @@ public class Event extends Task {
     protected String to;
     protected LocalDate fromDate;
     protected LocalDate toDate;
+    protected LocalDateTime fromDateTime;
+    protected LocalDateTime toDateTime;
+
+    private static final DateTimeFormatter[] DATETIME_FORMATTERS = new DateTimeFormatter[] {
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+    };
+    private static final DateTimeFormatter OUTPUT_DATE_FORMATTER = DateTimeFormatter.ofPattern("MMM dd yyyy");
+    private static final DateTimeFormatter OUTPUT_DATETIME_FORMATTER = DateTimeFormatter.ofPattern("MMM dd yyyy, HH:mm");
 
     /**
      * Constructs an {@code Event} task with a description, start time, and end time.
@@ -24,15 +34,38 @@ public class Event extends Task {
         super(description);
         this.from = from;
         this.to = to;
-        try {
-            this.fromDate = LocalDate.parse(from);
-        } catch (DateTimeParseException e) {
-            this.fromDate = null;
+
+        ParsedTimeResult startResult = parseDateOrDateTime(from);
+        this.fromDate = startResult.date;
+        this.fromDateTime = startResult.dateTime;
+
+        ParsedTimeResult endResult = parseDateOrDateTime(to);
+        this.toDate = endResult.date;
+        this.toDateTime = endResult.dateTime;
+    }
+
+    private ParsedTimeResult parseDateOrDateTime(String input) {
+        for (DateTimeFormatter formatter : DATETIME_FORMATTERS) {
+            try {
+                return new ParsedTimeResult(null, LocalDateTime.parse(input, formatter));
+            } catch (DateTimeParseException ignored) {
+                // Try next pattern
+            }
         }
         try {
-            this.toDate = LocalDate.parse(to);
+            return new ParsedTimeResult(LocalDate.parse(input), null);
         } catch (DateTimeParseException e) {
-            this.toDate = null;
+            return new ParsedTimeResult(null, null);
+        }
+    }
+
+    private static class ParsedTimeResult {
+        final LocalDate date;
+        final LocalDateTime dateTime;
+
+        ParsedTimeResult(LocalDate date, LocalDateTime dateTime) {
+            this.date = date;
+            this.dateTime = dateTime;
         }
     }
 
@@ -61,12 +94,17 @@ public class Event extends Task {
      */
     @Override
     public String toString() {
-        String displayFrom = (fromDate != null)
-                ? fromDate.format(DateTimeFormatter.ofPattern("MMM dd yyyy"))
-                : from;
-        String displayTo = (toDate != null)
-                ? toDate.format(DateTimeFormatter.ofPattern("MMM dd yyyy"))
-                : to;
+        String displayFrom = formatTimeOrDate(fromDateTime, fromDate, from);
+        String displayTo = formatTimeOrDate(toDateTime, toDate, to);
         return "[E]" + super.toString() + " (from: " + displayFrom + " to: " + displayTo + ")";
+    }
+
+    private String formatTimeOrDate(LocalDateTime dt, LocalDate d, String raw) {
+        if (dt != null) {
+            return dt.format(OUTPUT_DATETIME_FORMATTER);
+        } else if (d != null) {
+            return d.format(OUTPUT_DATE_FORMATTER);
+        }
+        return raw;
     }
 }

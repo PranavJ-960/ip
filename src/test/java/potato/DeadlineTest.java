@@ -15,7 +15,7 @@ public class DeadlineTest {
     @Test
     public void toStringValidDateFormattedCorrectly() {
         Deadline deadline = new Deadline("return book", "2026-09-15");
-        assertEquals("[D][ ] return book (by: Sep 15 2026)", deadline.toString());
+        assertEquals("[D][ ] return book (by: Sept 15 2026)", deadline.toString());
     }
 
     /**
