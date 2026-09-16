@@ -26,12 +26,16 @@ public class FindCommand extends Command {
 
         ui.showLine();
         if (matchingTasks.size() == 0) {
-            System.out.println(" No matching tasks found in your list.");
+            ui.showMessage(" No matching tasks found in your list.");
         } else {
-            System.out.println(" Here are the matching tasks in your list:");
+            StringBuilder matchingTasksMessage = new StringBuilder(" Here are the matching tasks in your list:\n");
             for (int i = 0; i < matchingTasks.size(); i++) {
-                System.out.println(" " + (i + 1) + "." + matchingTasks.get(i));
+                matchingTasksMessage.append(" ").append(i + 1).append(".").append(matchingTasks.get(i));
+                if (i < matchingTasks.size() - 1) {
+                    matchingTasksMessage.append("\n");
+                }
             }
+            ui.showMessage(matchingTasksMessage.toString());
         }
         ui.showLine();
     }

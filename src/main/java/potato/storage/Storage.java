@@ -8,6 +8,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import potato.exception.PotatoException;
 import potato.task.Deadline;
 import potato.task.Event;
 import potato.task.Task;
@@ -32,8 +34,9 @@ public class Storage {
      * Saves all tasks from the provided list into hard disk file storage.
      *
      * @param tasks List of tasks to write to the file.
+     * @throws PotatoException If the task list cannot be saved.
      */
-    public void save(ArrayList<Task> tasks) {
+    public void save(ArrayList<Task> tasks) throws PotatoException {
         try {
             Path path = Paths.get(filePath);
             if (path.getParent() != null) {
@@ -45,7 +48,7 @@ public class Storage {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Error saving tasks: " + e.getMessage());
+            throw new PotatoException("Could not save your tasks: " + e.getMessage());
         }
     }
 
@@ -70,6 +73,8 @@ public class Storage {
                 Task task = parseTaskFromFile(line);
                 if (task != null) {
                     tasks.add(task);
+                } else {
+                    System.out.println("Skipping corrupted save entry: " + line);
                 }
             }
         } catch (IOException e) {
