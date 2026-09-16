@@ -35,4 +35,28 @@ public class DeadlineTest {
         Deadline deadline = new Deadline("return book", "2026-09-15");
         assertEquals("2026-09-15", deadline.getBy());
     }
+
+    /**
+     * Tests that deadline tasks show the correct status before and after being marked done.
+     */
+    @Test
+    public void testStringConversion() {
+        Deadline deadline = new Deadline("submit recipe", "Sunday 5pm");
+        assertEquals("[D][ ] submit recipe (by: Sunday 5pm)", deadline.toString());
+
+        deadline.markAsDone();
+        assertEquals("[D][X] submit recipe (by: Sunday 5pm)", deadline.toString());
+    }
+
+    /**
+     * Tests that deadline tasks are converted into the correct save file format.
+     */
+    @Test
+    public void testFileFormat() {
+        Deadline deadline = new Deadline("submit recipe", "Sunday 5pm");
+        assertEquals("D | 0 | submit recipe | Sunday 5pm", deadline.toFileFormat());
+
+        deadline.markAsDone();
+        assertEquals("D | 1 | submit recipe | Sunday 5pm", deadline.toFileFormat());
+    }
 }

@@ -48,4 +48,14 @@ public class Deadline extends Task {
                 : rawDeadlineString;
         return "[D]" + super.toString() + " (by: " + formattedDisplayDate + ")";
     }
+
+    /**
+     * Returns the deadline task in the plain-text format used for file storage.
+     *
+     * @return Formatted save file line for this deadline.
+     */
+    public String toFileFormat() {
+        String isDoneFlag = getStatusIcon().equals("X") ? "1" : "0";
+        return "D | " + isDoneFlag + " | " + getDescription() + " | " + rawDeadlineString;
+    }
 }

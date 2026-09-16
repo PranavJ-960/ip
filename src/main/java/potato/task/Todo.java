@@ -23,4 +23,14 @@ public class Todo extends Task {
     public String toString() {
         return "[T]" + super.toString();
     }
+
+    /**
+     * Returns the todo task in the plain-text format used for file storage.
+     *
+     * @return Formatted save file line for this todo.
+     */
+    public String toFileFormat() {
+        String isDoneFlag = getStatusIcon().equals("X") ? "1" : "0";
+        return "T | " + isDoneFlag + " | " + getDescription();
+    }
 }
