@@ -6,6 +6,15 @@
 
 Potato is optimised for **typing commands** — if you're a fast typist, Potato can manage your tasks faster than a mouse-driven app.
 
+## Why Potato?
+
+Potato turns task management into a playful kitchen experience. Chef Patate 
+helps organise your todos, deadlines, and events while adding personality to
+every interaction.
+
+The name reflects the idea that tasks are the ingredients, and Potato helps
+you prepare and organise them into a manageable order.
+
 ## Quick Start
 
 1. Ensure you have **Java 17** or above installed on your computer.
