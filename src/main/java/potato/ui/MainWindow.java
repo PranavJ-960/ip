@@ -1,5 +1,6 @@
 package potato.ui;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -47,9 +48,12 @@ public class MainWindow extends AnchorPane {
         }
 
         boolean isError = false;
+        boolean shouldExit = false;
         String response;
         try {
             response = potato.getResponse(input);
+            isError = potato.wasLastResponseError();
+            shouldExit = potato.wasLastResponseExit();
         } catch (Exception e) {
             response = e.getMessage();
             isError = true;
@@ -60,5 +64,8 @@ public class MainWindow extends AnchorPane {
                 DialogBox.getPotatoDialog(response, potatoImage, isError)
         );
         userInput.clear();
+        if (shouldExit) {
+            Platform.exit();
+        }
     }
 }

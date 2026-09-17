@@ -19,6 +19,24 @@ public class DeadlineTest {
     }
 
     /**
+     * Tests that compact 24-hour date-time input is formatted into a readable date and time.
+     */
+    @Test
+    public void toStringCompactDateTimeFormattedCorrectly() {
+        Deadline deadline = new Deadline("submit report", "2026-06-15 1800");
+        assertEquals("[D][ ] submit report (by: Jun 15 2026, 18:00)", deadline.toString());
+    }
+
+    /**
+     * Tests that colon-separated 24-hour date-time input is formatted into a readable date and time.
+     */
+    @Test
+    public void toStringColonDateTimeFormattedCorrectly() {
+        Deadline deadline = new Deadline("submit report", "2026-06-15 18:00");
+        assertEquals("[D][ ] submit report (by: Jun 15 2026, 18:00)", deadline.toString());
+    }
+
+    /**
      * Tests that string representation falls back to raw string when input date is non-ISO format.
      */
     @Test

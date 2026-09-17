@@ -14,6 +14,8 @@ public class Potato {
     private final Storage storage;
     private TaskList tasks;
     private final Ui ui;
+    private boolean lastResponseWasError;
+    private boolean lastResponseWasExit;
 
     /**
      * Initializes Potato with a storage file path.
@@ -37,16 +39,39 @@ public class Potato {
      * @return String response output from executing the command.
      */
     public String getResponse(String input) {
+        lastResponseWasError = false;
+        lastResponseWasExit = false;
         if (input == null || input.trim().isEmpty()) {
+            lastResponseWasError = true;
             return "MON DIEU! Do not stand there silently! Order a task!";
         }
         try {
             Command command = Parser.parse(input);
             command.execute(tasks, ui, storage);
+            lastResponseWasExit = command.isExit();
             return ui.getAndClearResponse();
         } catch (PotatoException e) {
+            lastResponseWasError = true;
             return e.getMessage();
         }
+    }
+
+    /**
+     * Returns whether the latest GUI response was an error response.
+     *
+     * @return {@code true} if the most recent response came from invalid input; {@code false} otherwise.
+     */
+    public boolean wasLastResponseError() {
+        return lastResponseWasError;
+    }
+
+    /**
+     * Returns whether the latest GUI response should end the application.
+     *
+     * @return {@code true} if the most recent command was an exit command; {@code false} otherwise.
+     */
+    public boolean wasLastResponseExit() {
+        return lastResponseWasExit;
     }
 
     /**

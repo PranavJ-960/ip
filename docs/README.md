@@ -14,7 +14,7 @@ The name reflects the idea that tasks are the ingredients, and Potato helps you 
 
 ## Quick Start
 
-1. Ensure you have **Java 17** or above installed on your computer.
+1. Ensure you have **Java 25** installed on your computer.
 2. Download the latest `potato.jar` from the [releases page](../../releases).
 3. Copy the file to the folder you want to use as the home folder for Potato.
 4. Open a terminal in that folder and run:
