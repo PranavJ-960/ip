@@ -37,11 +37,11 @@ The name reflects the idea that tasks are the ingredients, and Potato helps you 
 > **Notes on the command format**
 > * Words in `UPPER_CASE` are parameters you supply, e.g. in `todo DESCRIPTION`, `DESCRIPTION` is the task description.
 > * Task numbers (`INDEX`) refer to the position shown by the `list` command, starting from 1.
-> * Dates can be entered as `yyyy-MM-dd` (e.g. `2026-06-15`), or with a time as `yyyy-MM-dd HHmm` / `yyyy-MM-dd HH:mm` (e.g. `2026-06-15 1800` or `2026-06-15 18:00`) for a more precise deadline or event time. Any other format is kept and displayed exactly as typed.
+> * Dates must be entered as `yyyy-MM-dd` (e.g. `2026-06-15`), or with a time as `yyyy-MM-dd HHmm` / `yyyy-MM-dd HH:mm` (e.g. `2026-06-15 1800` or `2026-06-15 18:00`) for a more precise deadline or event time. Other formats, such as `sunday` or `next monday`, are rejected.
 
 ### How dates are parsed and displayed
 
-If you type a date/time in one of the recognised formats above, Potato understands it as a real date and reformats it into a friendlier, human-readable style whenever the task is shown (in `list`, `find`, or right after adding it). If you type anything else, Potato can't be sure what it means, so it just stores and displays your text exactly as you typed it — nothing is lost, it just won't be "understood" as a date.
+If you type a date/time in one of the recognised formats above, Potato understands it as a real date and reformats it into a friendlier, human-readable style whenever the task is shown (in `list`, `find`, or right after adding it). If the date/time is not in one of these formats, or if the date does not exist, Potato rejects the command and asks you to use a valid date.
 
 | You type | Potato recognises it as | Displayed as |
 |---|---|---|
@@ -49,9 +49,10 @@ If you type a date/time in one of the recognised formats above, Potato understan
 | `2026-09-15` | a date | `Sept 15 2026` |
 | `2026-06-15 1800` | a date and time | `Jun 15 2026, 18:00` |
 | `2026-06-15 18:00` | a date and time | `Jun 15 2026, 18:00` |
-| `next monday` | plain text (unrecognised) | `next monday` |
+| `next monday` | invalid input | rejected |
+| `2026-02-31` | impossible date | rejected |
 
-This applies to both `/by` (for `deadline`) and `/from` / `/to` (for `event`) — each date is parsed independently, so an event can even mix a recognised date for `/from` with plain text for `/to` if you're not sure of the exact date yet.
+This applies to both `/by` (for `deadline`) and `/from` / `/to` (for `event`). Every date field in a command must be valid before Potato adds the task.
 
 > **Note:** Most months are shown with a 3-letter abbreviation (`Jun`, `Jul`, `Aug`, `Oct`...), but September is shown as `Sept` (4 letters). This isn't a typo — it's how Java's date formatting library abbreviates that month by default.
 
