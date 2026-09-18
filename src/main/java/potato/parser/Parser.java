@@ -1,5 +1,11 @@
 package potato.parser;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
+
 import potato.command.AddCommand;
 import potato.command.Command;
 import potato.command.DeleteCommand;
@@ -17,6 +23,11 @@ import potato.task.Todo;
  * Parses user input strings into executable {@code Command} objects.
  */
 public class Parser {
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
+    private static final DateTimeFormatter[] DATE_TIME_FORMATTERS = new DateTimeFormatter[] {
+            DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm").withResolverStyle(ResolverStyle.STRICT),
+            DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm").withResolverStyle(ResolverStyle.STRICT)
+    };
 
     /**
      * Enumerates supported command types and provides parsing from input strings.
@@ -130,7 +141,9 @@ public class Parser {
         if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
             throw new PotatoException("INCOMPETENT! Specify the deadline using '/by <date/time>' or it will be SERVED COLD!");
         }
-        return new AddCommand(new Deadline(parts[0].trim(), parts[1].trim()));
+        String deadlineDateTime = parts[1].trim();
+        validateDateOrDateTime(deadlineDateTime, "deadline");
+        return new AddCommand(new Deadline(parts[0].trim(), deadlineDateTime));
     }
 
     /**
@@ -154,6 +167,38 @@ public class Parser {
         if (timeParts.length < 2 || timeParts[0].trim().isEmpty() || timeParts[1].trim().isEmpty()) {
             throw new PotatoException("SACREBLEU! Event is missing end time! Specify using '/to <end>'!");
         }
-        return new AddCommand(new Event(parts[0].trim(), timeParts[0].trim(), timeParts[1].trim()));
+        String startDateTime = timeParts[0].trim();
+        String endDateTime = timeParts[1].trim();
+        validateDateOrDateTime(startDateTime, "event start");
+        validateDateOrDateTime(endDateTime, "event end");
+        return new AddCommand(new Event(parts[0].trim(), startDateTime, endDateTime));
+    }
+
+    /**
+     * Validates that a date/time argument uses one of Potato's supported date formats.
+     *
+     * @param input Date or date-time string entered by the user.
+     * @param fieldName Name of the command field being validated.
+     * @throws PotatoException If the input is not a real date or date-time in the supported format.
+     */
+    private static void validateDateOrDateTime(String input, String fieldName) throws PotatoException {
+        assert input != null : "Date/time input passed to validateDateOrDateTime should not be null";
+        assert fieldName != null : "Field name passed to validateDateOrDateTime should not be null";
+
+        for (DateTimeFormatter formatter : DATE_TIME_FORMATTERS) {
+            try {
+                LocalDateTime.parse(input, formatter);
+                return;
+            } catch (DateTimeParseException ignored) {
+                // Try the next supported format.
+            }
+        }
+
+        try {
+            LocalDate.parse(input, DATE_FORMATTER);
+        } catch (DateTimeParseException e) {
+            throw new PotatoException("SACREBLEU! Invalid " + fieldName
+                    + " date/time. Use yyyy-MM-dd, yyyy-MM-dd HHmm, or yyyy-MM-dd HH:mm with a real calendar date!");
+        }
     }
 }

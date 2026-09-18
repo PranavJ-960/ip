@@ -60,4 +60,59 @@ public class ParserTest {
     public void parseUnknownCommandExceptionThrown() {
         assertThrows(PotatoException.class, () -> Parser.parse("invalidCommand"));
     }
+
+    /**
+     * Tests that a deadline with a valid ISO date parses into an {@code AddCommand}.
+     *
+     * @throws PotatoException If parsing fails unexpectedly.
+     */
+    @Test
+    public void parseDeadlineWithValidDateSuccess() throws PotatoException {
+        assertInstanceOf(AddCommand.class, Parser.parse("deadline return book /by 2026-09-15"));
+    }
+
+    /**
+     * Tests that a deadline with free-text date input is rejected.
+     */
+    @Test
+    public void parseDeadlineWithInvalidDateFormatExceptionThrown() {
+        assertThrows(PotatoException.class, () -> Parser.parse("deadline return book /by hello"));
+    }
+
+    /**
+     * Tests that impossible calendar dates are rejected.
+     */
+    @Test
+    public void parseDeadlineWithImpossibleDateExceptionThrown() {
+        assertThrows(PotatoException.class, () -> Parser.parse("deadline return book /by 2026-02-31"));
+    }
+
+    /**
+     * Tests that an event with valid ISO date-time arguments parses into an {@code AddCommand}.
+     *
+     * @throws PotatoException If parsing fails unexpectedly.
+     */
+    @Test
+    public void parseEventWithValidDateTimesSuccess() throws PotatoException {
+        assertInstanceOf(AddCommand.class,
+                Parser.parse("event project meeting /from 2026-09-15 1400 /to 2026-09-15 16:00"));
+    }
+
+    /**
+     * Tests that an event with free-text start time is rejected.
+     */
+    @Test
+    public void parseEventWithInvalidStartDateFormatExceptionThrown() {
+        assertThrows(PotatoException.class,
+                () -> Parser.parse("event project meeting /from sunday /to 2026-09-15"));
+    }
+
+    /**
+     * Tests that an event with an impossible end date is rejected.
+     */
+    @Test
+    public void parseEventWithImpossibleEndDateExceptionThrown() {
+        assertThrows(PotatoException.class,
+                () -> Parser.parse("event project meeting /from 2026-09-15 /to 2026-02-31"));
+    }
 }

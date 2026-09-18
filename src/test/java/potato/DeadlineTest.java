@@ -37,15 +37,6 @@ public class DeadlineTest {
     }
 
     /**
-     * Tests that string representation falls back to raw string when input date is non-ISO format.
-     */
-    @Test
-    public void toStringInvalidDateFormatReturnsRawString() {
-        Deadline deadline = new Deadline("return book", "Sunday");
-        assertEquals("[D][ ] return book (by: Sunday)", deadline.toString());
-    }
-
-    /**
      * Tests that {@code getBy()} returns the exact raw deadline string passed to the constructor.
      */
     @Test
@@ -59,11 +50,11 @@ public class DeadlineTest {
      */
     @Test
     public void testStringConversion() {
-        Deadline deadline = new Deadline("submit recipe", "Sunday 5pm");
-        assertEquals("[D][ ] submit recipe (by: Sunday 5pm)", deadline.toString());
+        Deadline deadline = new Deadline("submit recipe", "2026-09-15");
+        assertEquals("[D][ ] submit recipe (by: Sept 15 2026)", deadline.toString());
 
         deadline.markAsDone();
-        assertEquals("[D][X] submit recipe (by: Sunday 5pm)", deadline.toString());
+        assertEquals("[D][X] submit recipe (by: Sept 15 2026)", deadline.toString());
     }
 
     /**
@@ -71,10 +62,10 @@ public class DeadlineTest {
      */
     @Test
     public void testFileFormat() {
-        Deadline deadline = new Deadline("submit recipe", "Sunday 5pm");
-        assertEquals("D | 0 | submit recipe | Sunday 5pm", deadline.toFileFormat());
+        Deadline deadline = new Deadline("submit recipe", "2026-09-15");
+        assertEquals("D | 0 | submit recipe | 2026-09-15", deadline.toFileFormat());
 
         deadline.markAsDone();
-        assertEquals("D | 1 | submit recipe | Sunday 5pm", deadline.toFileFormat());
+        assertEquals("D | 1 | submit recipe | 2026-09-15", deadline.toFileFormat());
     }
 }
